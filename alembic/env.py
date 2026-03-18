@@ -9,22 +9,15 @@ from alembic import context
 from dotenv import load_dotenv
 
 load_dotenv()
-
-# this is the Alembic Config object
 config = context.config
-
-# override sqlalchemy.url from .env
 config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
-# import all models so Alembic can detect them
 from database import Base
-import models  # noqa: F401
+import models
 
 target_metadata = Base.metadata
-
 
 def run_migrations_offline():
     url = config.get_main_option("sqlalchemy.url")
@@ -37,12 +30,10 @@ def run_migrations_offline():
     with context.begin_transaction():
         context.run_migrations()
 
-
 def do_run_migrations(connection):
     context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()
-
 
 async def run_migrations_online():
     connectable = create_async_engine(
@@ -52,7 +43,6 @@ async def run_migrations_online():
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
     await connectable.dispose()
-
 
 if context.is_offline_mode():
     run_migrations_offline()
