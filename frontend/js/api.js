@@ -11,8 +11,6 @@ async function apiFetch(path, options = {}) {
   }
   return res.json();
 }
-
-// Check API health and update sidebar indicator
 async function checkApiStatus() {
   const el = document.getElementById("apiStatus");
   try {

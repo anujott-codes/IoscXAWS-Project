@@ -1,4 +1,4 @@
-/* ── Variables ──────────────────────────────────────────────────────────── */
+
 :root {
   --bg: #0e1117;
   --bg-2: #161b25;
@@ -22,7 +22,6 @@
   --font-mono: 'DM Mono', monospace;
 }
 
-/* ── Reset ──────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -36,13 +35,11 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* ── Layout ─────────────────────────────────────────────────────────────── */
 .app-shell {
   display: flex;
   min-height: 100vh;
 }
 
-/* ── Sidebar ────────────────────────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-w);
   background: var(--bg-2);
@@ -162,7 +159,6 @@ a { color: inherit; text-decoration: none; }
 .api-status.offline .status-dot { background: var(--danger); }
 .api-status.offline .status-text { color: var(--danger); }
 
-/* ── Main content ───────────────────────────────────────────────────────── */
 .main-content {
   margin-left: var(--sidebar-w);
   flex: 1;
@@ -170,7 +166,6 @@ a { color: inherit; text-decoration: none; }
   max-width: calc(100vw - var(--sidebar-w));
 }
 
-/* ── Page header ────────────────────────────────────────────────────────── */
 .page-header {
   display: flex;
   align-items: flex-start;
@@ -211,7 +206,6 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
 }
 
-/* ── Buttons ────────────────────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -265,7 +259,6 @@ a { color: inherit; text-decoration: none; }
   font-size: 12.5px;
 }
 
-/* ── Stats grid ─────────────────────────────────────────────────────────── */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -311,7 +304,6 @@ a { color: inherit; text-decoration: none; }
   line-height: 1;
 }
 
-/* ── Charts row ─────────────────────────────────────────────────────────── */
 .charts-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -378,7 +370,6 @@ a { color: inherit; text-decoration: none; }
   flex-shrink: 0;
 }
 
-/* ── Filters bar ────────────────────────────────────────────────────────── */
 .filters-bar {
   display: flex;
   align-items: flex-end;
@@ -418,7 +409,6 @@ a { color: inherit; text-decoration: none; }
   border-color: var(--accent);
 }
 
-/* ── Table ──────────────────────────────────────────────────────────────── */
 .table-card {
   background: var(--bg-2);
   border: 1px solid var(--border);
@@ -501,7 +491,6 @@ a { color: inherit; text-decoration: none; }
   gap: 6px;
 }
 
-/* ── Form card ──────────────────────────────────────────────────────────── */
 .form-card {
   background: var(--bg-2);
   border: 1px solid var(--border);
@@ -569,7 +558,6 @@ a { color: inherit; text-decoration: none; }
   border-top: 1px solid var(--border);
 }
 
-/* ── Alert ──────────────────────────────────────────────────────────────── */
 .alert {
   padding: 12px 16px;
   border-radius: var(--radius);
@@ -592,7 +580,6 @@ a { color: inherit; text-decoration: none; }
   color: var(--danger);
 }
 
-/* ── Tabs ───────────────────────────────────────────────────────────────── */
 .tabs {
   display: flex;
   gap: 2px;
@@ -629,7 +616,6 @@ a { color: inherit; text-decoration: none; }
 .tab-panel { display: block; }
 .tab-panel.hidden { display: none; }
 
-/* ── Section card ───────────────────────────────────────────────────────── */
 .section-card {
   background: var(--bg-2);
   border: 1px solid var(--border);
@@ -654,7 +640,6 @@ a { color: inherit; text-decoration: none; }
   color: var(--text);
 }
 
-/* ── Info grid (read mode) ──────────────────────────────────────────────── */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -704,7 +689,6 @@ a { color: inherit; text-decoration: none; }
   padding: 12px 0;
 }
 
-/* ── Semester grid ──────────────────────────────────────────────────────── */
 .sem-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -740,7 +724,6 @@ a { color: inherit; text-decoration: none; }
   font-size: 12.5px;
 }
 
-/* ── Items list (internships, research) ─────────────────────────────────── */
 .items-list {
   display: flex;
   flex-direction: column;
@@ -785,7 +768,6 @@ a { color: inherit; text-decoration: none; }
   flex-shrink: 0;
 }
 
-/* ── Modal ──────────────────────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -833,7 +815,6 @@ a { color: inherit; text-decoration: none; }
   justify-content: flex-end;
 }
 
-/* ── Student photo in table ──────────────────────────────────────────────── */
 .student-photo {
   width: 36px;
   height: 36px;
@@ -858,7 +839,6 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent);
 }
 
-/* ── Upload section ─────────────────────────────────────────────────────── */
 .upload-section {
   margin-top: 20px;
   padding-top: 20px;
@@ -900,7 +880,6 @@ input[type="file"].form-input::-webkit-file-upload-button {
   margin-top: 6px;
 }
 
-/* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .charts-row { grid-template-columns: 1fr; }

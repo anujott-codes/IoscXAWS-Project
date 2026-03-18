@@ -12,8 +12,6 @@ let nocExists = false;
 let placementExists = false;
 let acadocsExists = false;
 
-// ── Load full profile ────────────────────────────────────────────────────
-
 async function loadProfile() {
   try {
     studentData = await apiFetch(`/students/${studentId}`);
@@ -41,8 +39,6 @@ async function loadProfile() {
     document.getElementById("profileName").textContent = "Error loading student";
   }
 }
-
-// ── Render helpers ───────────────────────────────────────────────────────
 
 function renderBasicInfo(s) {
   document.getElementById("profileName").textContent = s.name;
@@ -217,8 +213,6 @@ function renderAcadocs(a) {
   `;
 }
 
-// ── Tab switching ────────────────────────────────────────────────────────
-
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -227,8 +221,6 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     document.getElementById("tab-" + btn.dataset.tab).classList.remove("hidden");
   });
 });
-
-// ── Basic info edit ──────────────────────────────────────────────────────
 
 document.getElementById("editBasicBtn").addEventListener("click", () => {
   document.getElementById("basicInfoView").classList.add("hidden");
@@ -269,13 +261,9 @@ document.getElementById("saveBasicBtn").addEventListener("click", async () => {
   }
 });
 
-// ── Generic toggle helper ────────────────────────────────────────────────
-
 function toggleForm(viewId, formId) {
   document.getElementById(formId).classList.toggle("hidden");
 }
-
-// ── Classification ───────────────────────────────────────────────────────
 
 document.getElementById("classificationBtn").addEventListener("click", () => {
   const form = document.getElementById("classificationForm");
@@ -319,8 +307,6 @@ document.getElementById("saveClassification").addEventListener("click", async ()
   }
 });
 
-// ── Parent ───────────────────────────────────────────────────────────────
-
 document.getElementById("parentBtn").addEventListener("click", () => {
   const form = document.getElementById("parentForm");
   form.classList.toggle("hidden");
@@ -357,13 +343,10 @@ document.getElementById("saveParent").addEventListener("click", async () => {
   }
 });
 
-// ── Academic ─────────────────────────────────────────────────────────────
-
 document.getElementById("academicBtn").addEventListener("click", () => {
   const form = document.getElementById("academicForm");
   form.classList.toggle("hidden");
   if (!form.classList.contains("hidden")) {
-    // Build semester inputs
     const semGrid = form.querySelector(".sem-grid");
     semGrid.innerHTML = [1,2,3,4,5,6,7,8].map(n => `
       <div class="sem-block">
@@ -416,8 +399,6 @@ document.getElementById("saveAcademic").addEventListener("click", async () => {
   }
 });
 
-// ── Financial ────────────────────────────────────────────────────────────
-
 document.getElementById("financialBtn").addEventListener("click", () => {
   const form = document.getElementById("financialForm");
   form.classList.toggle("hidden");
@@ -451,8 +432,6 @@ document.getElementById("saveFinancial").addEventListener("click", async () => {
     showAlert("profileAlert", e.message, "error");
   }
 });
-
-// ── Internships ──────────────────────────────────────────────────────────
 
 document.getElementById("addInternshipBtn").addEventListener("click", () => {
   document.getElementById("internshipForm").classList.toggle("hidden");
@@ -493,8 +472,6 @@ async function deleteInternship(id) {
   }
 }
 
-// ── Research ─────────────────────────────────────────────────────────────
-
 document.getElementById("addResearchBtn").addEventListener("click", () => {
   document.getElementById("researchForm").classList.toggle("hidden");
 });
@@ -533,8 +510,6 @@ async function deleteResearch(id) {
   }
 }
 
-// ── Documents ────────────────────────────────────────────────────────────
-
 document.getElementById("documentsBtn").addEventListener("click", () => {
   const form = document.getElementById("documentsForm");
   form.classList.toggle("hidden");
@@ -570,8 +545,6 @@ document.getElementById("saveDocuments").addEventListener("click", async () => {
     showAlert("profileAlert", e.message, "error");
   }
 });
-
-// ── NOC ──────────────────────────────────────────────────────────────────
 
 document.getElementById("nocBtn").addEventListener("click", () => {
   const form = document.getElementById("nocForm");
@@ -610,8 +583,6 @@ document.getElementById("saveNoc").addEventListener("click", async () => {
     showAlert("profileAlert", e.message, "error");
   }
 });
-
-// ── Placement ────────────────────────────────────────────────────────────
 
 document.getElementById("placementBtn").addEventListener("click", () => {
   const form = document.getElementById("placementForm");
@@ -653,8 +624,6 @@ document.getElementById("savePlacement").addEventListener("click", async () => {
   }
 });
 
-// ── Academic Docs ────────────────────────────────────────────────────────
-
 document.getElementById("acadocsBtn").addEventListener("click", () => {
   const form = document.getElementById("acadocsForm");
   form.classList.toggle("hidden");
@@ -689,8 +658,6 @@ document.getElementById("saveAcadocs").addEventListener("click", async () => {
   }
 });
 
-// ── File uploads ─────────────────────────────────────────────────────────
-
 async function uploadFile(endpoint, fieldName, fileInput) {
   const file = fileInput.files[0];
   if (!file) return false;
@@ -706,8 +673,6 @@ async function uploadFile(endpoint, fieldName, fileInput) {
   }
   return await res.json();
 }
-
-// Photo + Signature upload (triggered alongside save basic)
 document.getElementById("saveBasicBtn").addEventListener("click", async () => {
   const photoFile = document.getElementById("upload_photo").files[0];
   const sigFile = document.getElementById("upload_signature").files[0];
@@ -727,9 +692,7 @@ document.getElementById("saveBasicBtn").addEventListener("click", async () => {
       showAlert("profileAlert", "Signature upload failed: " + e.message, "error");
     }
   }
-}, { capture: true }); // runs before the existing saveBasicBtn listener
-
-// Document file uploads
+}, { capture: true });
 document.getElementById("uploadDocsBtn").addEventListener("click", async () => {
   const aadhaar = document.getElementById("upload_aadhaar");
   const pan = document.getElementById("upload_pan");
@@ -757,8 +720,6 @@ document.getElementById("uploadDocsBtn").addEventListener("click", async () => {
     showAlert("profileAlert", e.message, "error");
   }
 });
-
-// Academic document file uploads
 document.getElementById("uploadAcadocsBtn").addEventListener("click", async () => {
   const marksheets = document.getElementById("upload_marksheets");
   const provisional = document.getElementById("upload_provisional");
@@ -784,6 +745,4 @@ document.getElementById("uploadAcadocsBtn").addEventListener("click", async () =
     showAlert("profileAlert", e.message, "error");
   }
 });
-
-// ── Init ─────────────────────────────────────────────────────────────────
 loadProfile();

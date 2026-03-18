@@ -50,8 +50,6 @@ function renderTable(students) {
     </tr>
   `).join("");
 }
-
-// Live search — filters already-loaded data, no extra API call
 document.getElementById("searchInput").addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase().trim();
   if (!query) {
