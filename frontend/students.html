@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Students — E-Student Cell</title>
+  <title>E Student Cell</title>
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 </head>
@@ -49,6 +50,7 @@
         <a href="add-student.html" class="btn btn-primary">+ Add Student</a>
       </header>
 
+      <!-- Filters -->
       <div class="filters-bar">
         <div class="filter-group" style="flex:1;min-width:220px">
           <label class="filter-label">Search</label>
@@ -62,6 +64,7 @@
             <option value="AIML">AIML</option>
             <option value="AR">AR</option>
             <option value="IIOT">IIOT</option>
+            
           </select>
         </div>
         <div class="filter-group">
@@ -78,6 +81,7 @@
         <button class="btn btn-ghost" id="clearFilters">Clear</button>
       </div>
 
+      <!-- Table -->
       <div class="table-card">
         <table class="data-table">
           <thead>
@@ -100,6 +104,7 @@
     </main>
   </div>
 
+  <!-- Delete confirmation modal -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal">
       <h3 class="modal-title">Delete Student</h3>
