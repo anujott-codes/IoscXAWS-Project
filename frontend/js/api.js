@@ -39,18 +39,114 @@ function boolDisplay(val) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("menuToggle");
   const sidebar = document.querySelector(".sidebar");
-  const mainContent = document.querySelector(".main-content");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const navItems = document.querySelectorAll(".sidebar-nav a");
+  const body = document.documentElement.parentElement;
   
-  if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener("click", () => {
-      if (window.innerWidth <= 900) {
-        sidebar.classList.toggle("visible");
+  const STORAGE_KEY = "sidebar-collapsed";
+  const BREAKPOINT = 980;
+  
+  // Initialize sidebar state from localStorage
+  function initSidebar() {
+    const isCollapsed = localStorage.getItem(STORAGE_KEY) === "true";
+    const isMobile = window.innerWidth <= BREAKPOINT;
+    
+    if (isMobile) {
+      sidebar.classList.add("mobile-drawer");
+      sidebar.classList.remove("collapsed", "visible");
+    } else {
+      sidebar.classList.remove("mobile-drawer", "visible");
+      body.classList.remove("sidebar-open");
+      if (isCollapsed) {
+        sidebar.classList.add("collapsed");
       } else {
-        sidebar.classList.toggle("hidden");
-        if (mainContent) mainContent.classList.toggle("expanded");
+        sidebar.classList.remove("collapsed");
+      }
+    }
+  }
+  
+  // Toggle sidebar collapsed state (desktop only)
+  function toggleSidebarCollapse() {
+    const isMobile = window.innerWidth <= BREAKPOINT;
+    if (isMobile) return;
+    
+    sidebar.classList.toggle("collapsed");
+    const isCollapsed = sidebar.classList.contains("collapsed");
+    localStorage.setItem(STORAGE_KEY, isCollapsed);
+  }
+  
+  // Toggle sidebar visibility (mobile drawer)
+  function toggleSidebarMobile() {
+    const isMobile = window.innerWidth <= BREAKPOINT;
+    if (!isMobile) return;
+    
+    sidebar.classList.toggle("visible");
+    body.classList.toggle("sidebar-open");
+  }
+  
+  // Close sidebar on mobile when nav item is clicked
+  function closeMobileSidebar() {
+    const isMobile = window.innerWidth <= BREAKPOINT;
+    if (isMobile) {
+      sidebar.classList.remove("visible");
+      body.classList.remove("sidebar-open");
+    }
+  }
+  
+  // Handle window resize
+  function handleResize() {
+    const body = document.documentElement.parentElement;
+    const isMobile = window.innerWidth <= BREAKPOINT;
+    
+    if (isMobile && !sidebar.classList.contains("mobile-drawer")) {
+      sidebar.classList.add("mobile-drawer");
+      sidebar.classList.remove("collapsed", "visible");
+      body.classList.remove("sidebar-open");
+    } else if (!isMobile && sidebar.classList.contains("mobile-drawer")) {
+      sidebar.classList.remove("mobile-drawer", "visible");
+      body.classList.remove("sidebar-open");
+      const isCollapsed = localStorage.getItem(STORAGE_KEY) === "true";
+      if (isCollapsed) {
+        sidebar.classList.add("collapsed");
+      } else {
+        sidebar.classList.remove("collapsed");
+      }
+    }
+  }
+  
+  // Event listeners
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener("click", toggleSidebarCollapse);
+  }
+  
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      if (confirm("Are you sure you want to logout?")) {
+        window.location.href = "/login";
       }
     });
+  }
+  
+  navItems.forEach(item => {
+    item.addEventListener("click", closeMobileSidebar);
+  });
+  
+  // Close sidebar when clicking the overlay backdrop
+  if (body) {
+    body.addEventListener("click", (e) => {
+      const isMobile = window.innerWidth <= BREAKPOINT;
+      if (isMobile && sidebar.classList.contains("visible") && e.target === body) {
+        closeMobileSidebar();
+      }
+    });
+  }
+  
+  window.addEventListener("resize", handleResize);
+  
+  // Initialize
+  if (sidebar) {
+    initSidebar();
   }
 });
