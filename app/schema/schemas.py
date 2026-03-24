@@ -223,3 +223,16 @@ class DashboardStats(BaseModel):
     research_count: int
     branch_wise: dict
     year_wise: dict
+
+class CGPAEntry(BaseModel):
+    semester: int
+    cgpa: Optional[float]
+    backlogs: int
+
+
+class CGPAAnalytics(BaseModel):
+    average_cgpa: Optional[float]
+    highest_cgpa: Optional[float]
+    lowest_cgpa: Optional[float]
+    total_backlogs: int
+    cgpa_trend: List[float]

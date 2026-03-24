@@ -12,7 +12,8 @@ from app.routes import (
     dashboard,
     classification,
     noc,
-    academic_document
+    academic_document,
+    cgpa
 )
 
 router = APIRouter()
@@ -30,3 +31,4 @@ router.include_router(dashboard.router)
 router.include_router(classification.router)
 router.include_router(noc.router)
 router.include_router(academic_document.router)
+router.include_router(cgpa.router)
