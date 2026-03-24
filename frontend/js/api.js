@@ -116,8 +116,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   // Event listeners
+  const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener("click", () => {
+      const isMobile = window.innerWidth <= BREAKPOINT;
+      if (isMobile) {
+        toggleSidebarMobile();
+      }
+    });
+  }
+  
   if (sidebarToggle) {
-    sidebarToggle.addEventListener("click", toggleSidebarCollapse);
+    sidebarToggle.addEventListener("click", () => {
+      const isMobile = window.innerWidth <= BREAKPOINT;
+      if (isMobile) {
+        toggleSidebarMobile();
+      } else {
+        toggleSidebarCollapse();
+      }
+    });
   }
   
   const logoutBtn = document.getElementById("logoutBtn");
@@ -142,6 +159,37 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  
+  // Theme Toggle Functionality
+  const THEME_KEY = "theme-preference";
+  const themeToggle = document.getElementById("themeToggle");
+  const themeLabel = document.getElementById("themeLabel");
+  const htmlElement = document.documentElement;
+  
+  function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+    if (savedTheme === "dark") {
+      htmlElement.classList.add("dark-mode");
+      if (themeLabel) themeLabel.textContent = "Dark";
+    } else {
+      htmlElement.classList.remove("dark-mode");
+      if (themeLabel) themeLabel.textContent = "Light";
+    }
+  }
+  
+  function toggleTheme() {
+    const isDarkMode = htmlElement.classList.toggle("dark-mode");
+    const theme = isDarkMode ? "dark" : "light";
+    localStorage.setItem(THEME_KEY, theme);
+    if (themeLabel) themeLabel.textContent = isDarkMode ? "Dark" : "Light";
+  }
+  
+  if (themeToggle) {
+    themeToggle.addEventListener("click", toggleTheme);
+  }
+  
+  // Initialize theme on page load
+  initTheme();
   
   window.addEventListener("resize", handleResize);
   

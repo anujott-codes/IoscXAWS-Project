@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Profile — E-Student Cell</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
@@ -40,6 +40,16 @@
           <span class="nav-item-label">Add Student</span>
         </a>
       </nav>
+      <div class="theme-switcher-section">
+        <div class="theme-toggle-container">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+          </button>
+          <span class="theme-label" id="themeLabel">Light</span>
+        </div>
+      </div>
+
       <div class="sidebar-footer">
         <div class="sidebar-footer-content">
           <div class="api-status" id="apiStatus">
@@ -56,6 +66,9 @@
 
     <main class="main-content">
       <header class="page-header">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Mobile Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <div class="header-left">
           <div>
             <a href="students.html" class="back-link">← Back to Students</a>
@@ -608,6 +621,8 @@
       </div><!-- end tab-content -->
     </main>
   </div>
+
+  <footer class="universal-footer">Made by IoSC & AWS EDC</footer>
 
   <script src="js/api.js"></script>
   <script src="js/pages/profile.js"></script>
