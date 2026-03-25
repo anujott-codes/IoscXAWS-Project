@@ -9,8 +9,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, Enum as SAEnum
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy import Column, Integer, String, Enum as SAEnum
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.future import select
 
@@ -72,12 +72,12 @@ async def get_user_by_username(db: AsyncSession, username: str):
     result = await db.execute(select(DBUser).filter(DBUser.username == username))
     return result.scalars().first()
 
-async def create_new_user(db: Session, username: str, plain_password: str, role: RoleEnum):
+async def create_new_user(db: AsyncSession, username: str, plain_password: str, role: RoleEnum):
     hashed_pwd = get_password_hash(plain_password)
     db_user = DBUser(username=username, role=role, password_hash=hashed_pwd)
     db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+    await  db.commit()
+    await db.refresh(db_user)
     return db_user
 
 async def authenticate_user(db: AsyncSession, username: str, password: str):
