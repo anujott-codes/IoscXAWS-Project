@@ -3,10 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import app.schema.schemas as schemas
 from app.services import academic_services
 from app.core.database import get_db
+from app.services.authorization_services import verify_user_access
 
 router = APIRouter(
     prefix="/students/{student_id}/academic",
-    tags=["Academic"]
+    tags=["Academic"],
+    dependencies=[Depends(verify_user_access)]
 )
 
 

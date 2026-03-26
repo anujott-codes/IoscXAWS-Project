@@ -5,11 +5,13 @@ from typing import Optional
 import app.schema.schemas as schemas
 from app.core.database import get_db
 from app.services import academic_document_services
+from app.services.authorization_services import verify_user_access
 
 
 router = APIRouter(
     prefix="/students/{student_id}/academic-documents",
-    tags=["Academic Documents"]
+    tags=["Academic Documents"],
+    dependencies=[Depends(verify_user_access)]
 )
 
 

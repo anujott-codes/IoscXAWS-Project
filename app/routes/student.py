@@ -6,9 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 
 from app.services import student_services
+from app.services.authorization_services import verify_user_access
 
-
-router = APIRouter(prefix="/students", tags=["Students"])
+router = APIRouter(prefix="/students", tags=["Students"], dependencies=[Depends(verify_user_access)])
 
 
 @router.post("/", response_model=schemas.StudentResponse)

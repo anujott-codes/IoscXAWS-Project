@@ -3,11 +3,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import app.schema.schemas as schemas
 from app.core.database import get_db
 from app.services import placement_services
+from app.services.authorization_services import verify_user_access
 
 
 router = APIRouter(
     prefix="/students/{student_id}/placement",
-    tags=["Placement"]
+    tags=["Placement"],
+    dependencies=[Depends(verify_user_access)]
 )
 
 
