@@ -13,8 +13,11 @@ from app.services.authHelper import (
     create_access_token,
     get_current_user,
     User,
-    RoleEnum
+    RoleEnum,
+    verify_password
 )
+from app.schema.schemas import ChangePasswordRequest
+from app.services.account_services import changeUserPassword
 from app.core.database import get_db
 
 router = APIRouter(
@@ -22,6 +25,16 @@ router = APIRouter(
     tags=["auth"],
     responses={404: {"description": "Not found"}},
 )
+
+
+@router.get("/me")
+async def get_me(current_user: Annotated[User, Depends(get_current_user)]):
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "role": current_user.role,
+        "enrollment_number": current_user.username if current_user.role == RoleEnum.student else None
+    }
 
 
 @router.post("/token", response_model=Token)

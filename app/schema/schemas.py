@@ -3,6 +3,10 @@ from decimal import Decimal
 from pydantic import BaseModel, EmailStr, ConfigDict
 from app.model.models import CategoryEnum, ScholarshipEnum, InternshipTypeEnum, PaperTypeEnum
 
+class ChangePasswordRequest(BaseModel):
+    old_password: str
+    new_password: str
+
 class StudentBase(BaseModel):
     roll_number: str
     name: str
