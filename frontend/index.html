@@ -7,132 +7,71 @@
   <title>E-Student Cell</title>
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background-color: #f8f9fa;
+    }
+    .landing-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .landing-logo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .landing-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      color: #1a1a1a;
+    }
+    .landing-subtitle {
+      font-size: 1.25rem;
+      color: #666;
+      margin-bottom: 3rem;
+      max-width: 600px;
+    }
+    .login-btn {
+      display: inline-block;
+      padding: 0.75rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      background-color: #000;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .login-btn:hover {
+      background-color: #333;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
 
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="sidebar-brand-info">
-          <div class="brand-mark">
-            <img src="ipu.jpg" alt="ESC Logo" class="brand-logo"/>
-          </div>
-          <div class="brand-text">
-            <span class="brand-title">E-Student Cell</span>
-            <span class="brand-sub">Management System</span>
-          </div>
-        </div>
-        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg>
-        </button>
-      </div>
-
-      <nav class="sidebar-nav">
-        <a href="index.html" class="nav-item active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-          <span class="nav-item-label">Dashboard</span>
-        </a>
-        <a href="students.html" class="nav-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <span class="nav-item-label">Students</span>
-        </a>
-        <a href="add-student.html" class="nav-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-          <span class="nav-item-label">Add Student</span>
-        </a>
-      </nav>
-
-      
-
-      <div class="sidebar-footer">
-        <div class="sidebar-footer-content">
-          <div class="api-status" id="apiStatus">
-            <span class="status-dot"></span>
-            <span class="status-text">Connecting...</span>
-          </div>
-          <button class="logout-btn" id="logoutBtn" aria-label="Logout">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
-            <span class="logout-text">Logout</span>
-          </button>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <header class="page-header">
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Mobile Menu">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <div class="header-left">
-          <div>
-            <h1 class="page-title">Dashboard</h1>
-            <p class="page-subtitle">Overview of all student data</p>
-          </div>
-        </div>
-      </header>
-
-      <div class="stats-grid" id="statsGrid">
-        <div class="stat-card loading">
-          <div class="stat-label">Total Students</div>
-          <div class="stat-value" id="totalStudents">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">Hostellers</div>
-          <div class="stat-value" id="hostellers">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">Day Scholars</div>
-          <div class="stat-value" id="dayScholars">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">Placed</div>
-          <div class="stat-value" id="placed">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">NCC</div>
-          <div class="stat-value" id="ncc">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">NSS</div>
-          <div class="stat-value" id="nss">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">Loan Holders</div>
-          <div class="stat-value" id="loans">—</div>
-        </div>
-        <div class="stat-card loading">
-          <div class="stat-label">Internships</div>
-          <div class="stat-value" id="internships">—</div>
-        </div>
-      </div>
-
-      <div class="charts-row">
-        <div class="chart-card">
-          <h3 class="chart-title">Branch-wise Students</h3>
-          <div id="branchChart" class="bar-chart"></div>
-        </div>
-        <div class="chart-card">
-          <h3 class="chart-title">Year-wise Students</h3>
-          <div id="yearChart" class="bar-chart"></div>
-        </div>
-      </div>
-
-      <div class="charts-row">
-        <div class="chart-card">
-          <h3 class="chart-title">Category Breakdown</h3>
-          <div id="categoryChart" class="bar-chart"></div>
-        </div>
-        <div class="chart-card">
-          <h3 class="chart-title">Scholarship Breakdown</h3>
-          <div id="scholarshipChart" class="bar-chart"></div>
-        </div>
-      </div>
-    </main>
+  <div class="landing-container">
+    <img src="ipu.jpg" alt="ESC Logo" class="landing-logo"/>
+    <h1 class="landing-title">E-Student Cell</h1>
+    <p class="landing-subtitle">Welcome to the Student Management System.</p>
+    <a href="login.html" class="login-btn">Login</a>
   </div>
 
-  <footer class="universal-footer">Made by IoSC & AWS EDC | Support: <a href="mailto:iosc.aws@gmail.com" style="text-decoration: underline;">iosc.aws@gmail.com</a></footer>
+  <footer class="universal-footer" style="text-align: center; padding: 1rem; color: #666; font-size: 0.9rem;">Made by IoSC & AWS EDC | Support: <a href="mailto:iosc.aws@gmail.com" style="text-decoration: underline; color: inherit;">iosc.aws@gmail.com</a></footer>
 
-  <script src="js/api.js"></script>
-  <script src="js/pages/dashboard.js"></script>
 </body>
 </html>
