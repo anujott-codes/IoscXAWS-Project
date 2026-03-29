@@ -4,7 +4,6 @@ let isStudentNew = false;
 let studentData = null;
 let classificationExists = false;
 let parentExists = false;
-let academicExists = false;
 let financialExists = false;
 let documentsExists = false;
 let nocExists = false;
@@ -39,14 +38,12 @@ async function loadProfile() {
       isStudentNew = false;
     } catch (e) {
       isStudentNew = true;
-      // If student not found, initialize a blank student info
       studentData = { roll_number: studentId, name: 'Data Not entered', branch: 'Data Not entered', year: 1, email: '', mobile: '' };
     }
 
     renderBasicInfo(studentData);
     renderClassification(studentData.classification);
     renderParent(studentData.parent_details);
-    renderAcademic(studentData.academic_records);
     renderFinancial(studentData.financial_info);
     renderInternships(studentData.internships);
     renderResearch(studentData.research_papers);
@@ -57,7 +54,6 @@ async function loadProfile() {
 
     classificationExists = !!studentData.classification;
     parentExists = !!studentData.parent_details;
-    academicExists = !!studentData.academic_records;
     financialExists = !!studentData.financial_info;
     documentsExists = !!studentData.documents;
     nocExists = !!studentData.noc_records;
@@ -125,24 +121,6 @@ function renderParent(p) {
       <div class="info-item"><span class="info-label">Profession</span><span class="info-value">${p.profession || '—'}</span></div>
       <div class="info-item"><span class="info-label">Contact</span><span class="info-value mono">${p.contact_number || '—'}</span></div>
       <div class="info-item"><span class="info-label">Email</span><span class="info-value">${p.email || '—'}</span></div>
-    </div>
-  `;
-}
-
-function renderAcademic(a) {
-  const el = document.getElementById("academicView");
-  if (!a) { el.innerHTML = '<p class="no-data">No academic records added yet.</p>'; return; }
-  const sems = [1,2,3,4,5,6,7,8].map(n => `
-    <div class="info-item">
-      <span class="info-label">Sem ${n}</span>
-      <span class="info-value mono">CGPA: ${a[`sem${n}_cgpa`] ?? '—'} | Backlogs: ${a[`sem${n}_backlogs`] ?? 0}</span>
-    </div>
-  `).join("");
-  el.innerHTML = `
-    <div class="info-grid">${sems}</div>
-    <div class="info-grid" style="margin-top:12px">
-      <div class="info-item"><span class="info-label">Attendance</span><span class="info-value">${a.attendance_status || '—'}</span></div>
-      <div class="info-item"><span class="info-label">Club Activities</span><span class="info-value">${a.club_activities || '—'}</span></div>
     </div>
   `;
 }
@@ -314,10 +292,6 @@ document.getElementById("saveBasicBtn").addEventListener("click", async () => {
   }
 });
 
-function toggleForm(viewId, formId) {
-  document.getElementById(formId).classList.toggle("hidden");
-}
-
 document.getElementById("classificationBtn").addEventListener("click", () => {
   const form = document.getElementById("classificationForm");
   form.classList.toggle("hidden");
@@ -391,62 +365,6 @@ document.getElementById("saveParent").addEventListener("click", async () => {
     renderParent(result);
     document.getElementById("parentForm").classList.add("hidden");
     showAlert("profileAlert", "Parent details saved.", "success");
-  } catch (e) {
-    showAlert("profileAlert", e.message, "error");
-  }
-});
-
-document.getElementById("academicBtn").addEventListener("click", () => {
-  const form = document.getElementById("academicForm");
-  form.classList.toggle("hidden");
-  if (!form.classList.contains("hidden")) {
-    const semGrid = form.querySelector(".sem-grid");
-    semGrid.innerHTML = [1,2,3,4,5,6,7,8].map(n => `
-      <div class="sem-block">
-        <div class="sem-label">Semester ${n}</div>
-        <div class="form-group">
-          <label class="form-label">CGPA</label>
-          <input type="number" step="0.01" id="ac_sem${n}_cgpa" class="form-input" placeholder="0.00"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Backlogs</label>
-          <input type="number" id="ac_sem${n}_backlogs" class="form-input" placeholder="0"/>
-        </div>
-      </div>
-    `).join("");
-
-    if (academicExists && studentData.academic_records) {
-      const a = studentData.academic_records;
-      [1,2,3,4,5,6,7,8].forEach(n => {
-        document.getElementById(`ac_sem${n}_cgpa`).value = a[`sem${n}_cgpa`] || "";
-        document.getElementById(`ac_sem${n}_backlogs`).value = a[`sem${n}_backlogs`] || 0;
-      });
-      document.getElementById("ac_attendance_status").value = a.attendance_status || "";
-      document.getElementById("ac_club_activities").value = a.club_activities || "";
-    }
-  }
-});
-
-document.getElementById("cancelAcademic").addEventListener("click", () => {
-  document.getElementById("academicForm").classList.add("hidden");
-});
-
-document.getElementById("saveAcademic").addEventListener("click", async () => {
-  const body = { attendance_status: document.getElementById("ac_attendance_status").value || null, club_activities: document.getElementById("ac_club_activities").value || null };
-  [1,2,3,4,5,6,7,8].forEach(n => {
-    const cgpa = document.getElementById(`ac_sem${n}_cgpa`).value;
-    const backlogs = document.getElementById(`ac_sem${n}_backlogs`).value;
-    body[`sem${n}_cgpa`] = cgpa ? parseFloat(cgpa) : null;
-    body[`sem${n}_backlogs`] = backlogs ? parseInt(backlogs) : 0;
-  });
-  try {
-    const method = academicExists ? "PUT" : "POST";
-    const result = await apiFetch(`/students/${studentId}/academic`, { method, body: JSON.stringify(body) });
-    studentData.academic_records = result;
-    academicExists = true;
-    renderAcademic(result);
-    document.getElementById("academicForm").classList.add("hidden");
-    showAlert("profileAlert", "Academic records saved.", "success");
   } catch (e) {
     showAlert("profileAlert", e.message, "error");
   }
@@ -728,6 +646,7 @@ async function uploadFile(endpoint, fieldName, fileInput) {
   }
   return await res.json();
 }
+
 document.getElementById("saveBasicBtn").addEventListener("click", async () => {
   const photoFile = document.getElementById("upload_photo").files[0];
   const sigFile = document.getElementById("upload_signature").files[0];
@@ -748,6 +667,7 @@ document.getElementById("saveBasicBtn").addEventListener("click", async () => {
     }
   }
 }, { capture: true });
+
 document.getElementById("uploadDocsBtn").addEventListener("click", async () => {
   const aadhaar = document.getElementById("upload_aadhaar");
   const pan = document.getElementById("upload_pan");
@@ -775,6 +695,7 @@ document.getElementById("uploadDocsBtn").addEventListener("click", async () => {
     showAlert("profileAlert", e.message, "error");
   }
 });
+
 document.getElementById("uploadAcadocsBtn").addEventListener("click", async () => {
   const marksheets = document.getElementById("upload_marksheets");
   const provisional = document.getElementById("upload_provisional");
@@ -800,8 +721,8 @@ document.getElementById("uploadAcadocsBtn").addEventListener("click", async () =
     showAlert("profileAlert", e.message, "error");
   }
 });
-loadProfile();
 
+loadProfile();
 
 // Intercept all clicks to show Edit Notice popup
 document.addEventListener("click", (e) => {
