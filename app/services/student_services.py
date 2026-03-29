@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import delete
 import app.model.models as models
 from sqlalchemy.orm import selectinload
 import app.schema.schemas as schemas
@@ -88,7 +89,24 @@ async def delete_student(db: AsyncSession, student_id: str):
     student = await get_student_basic(db, student_id)
 
     try:
-        db.delete(student)
+        # Delete all related records in dependency order using cascade strategy
+        await db.execute(delete(models.StudentClassification).where(models.StudentClassification.student_id == student_id))
+        await db.execute(delete(models.ParentDetails).where(models.ParentDetails.student_id == student_id))
+        await db.execute(delete(models.AcademicRecords).where(models.AcademicRecords.student_id == student_id))
+        await db.execute(delete(models.FinancialInfo).where(models.FinancialInfo.student_id == student_id))
+        await db.execute(delete(models.Internship).where(models.Internship.student_id == student_id))
+        await db.execute(delete(models.ResearchPaper).where(models.ResearchPaper.student_id == student_id))
+        await db.execute(delete(models.Documents).where(models.Documents.student_id == student_id))
+        await db.execute(delete(models.NocRecords).where(models.NocRecords.student_id == student_id))
+        await db.execute(delete(models.Placement).where(models.Placement.student_id == student_id))
+        await db.execute(delete(models.AcademicDocuments).where(models.AcademicDocuments.student_id == student_id))
+        
+        # Delete corresponding user account from auth table
+        await db.execute(delete(models.DBUser).where(models.DBUser.username == student_id))
+        
+        # Finally delete the student record itself
+        await db.execute(delete(models.Student).where(models.Student.roll_number == student_id))
+        
         await db.commit()
         return {"detail": "Student deleted"}
     except Exception:
