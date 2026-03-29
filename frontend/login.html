@@ -6,13 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>E-Student Cell - Premium Login</title>
   
-  <!-- Modern Typography (Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* Premium Editorial Theme Variables */
     :root {
       --font-inter: 'Inter', sans-serif;
       --bg: #F8F5EC;
@@ -21,19 +19,15 @@
       --border: #E3D8C4;
       --text-main: #1C1A1A;
       --text-muted: #5E544A;
-      --primary: #8B1A1A;    /* Maroon */
-      --primary-hover: #C8A243; /* Gold */
+      --primary: #8B1A1A;
+      --primary-hover: #C8A243;
       --focus-ring: rgba(139, 26, 26, 0.4);
       --danger: #C85555;
       --danger-bg: rgba(200, 85, 85, 0.1);
       --radius: 8px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: var(--font-inter);
@@ -44,9 +38,71 @@
       justify-content: center;
       min-height: 100vh;
       line-height: 1.5;
+      position: relative;
     }
 
-    /* Layout & Card */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -20px;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center top;
+      filter: blur(6px) brightness(0.45);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at 50% 45%,
+        transparent 25%,
+        rgba(0, 0, 0, 0.45) 70%,
+        rgba(0, 0, 0, 0.75) 100%
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .back-home,
+    .login-container,
+    .universal-footer { position: relative; z-index: 1; }
+
+    /* ── Back button ── */
+    .back-home {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: all 0.2s ease;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(28,26,26,0.06);
+    }
+    .back-home:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--bg);
+    }
+    .back-home svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
     .login-container {
       width: 100%;
       max-width: 440px;
@@ -62,7 +118,6 @@
                   0 1px 3px rgba(28, 26, 26, 0.03);
     }
 
-    /* Header */
     .login-header {
       text-align: center;
       margin-bottom: 2.5rem;
@@ -91,7 +146,6 @@
       color: var(--text-muted);
     }
 
-    /* Role Toggles */
     .role-toggle {
       display: flex;
       gap: 0.5rem;
@@ -119,11 +173,8 @@
       color: var(--primary);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
-    .role-btn:not(.active):hover {
-      color: var(--text-main);
-    }
+    .role-btn:not(.active):hover { color: var(--text-main); }
 
-    /* Form Fields */
     .form-group {
       margin-bottom: 1.5rem;
       position: relative;
@@ -135,7 +186,6 @@
       margin-bottom: 0.5rem;
       color: var(--text-main);
     }
-    
     .input-wrapper {
       position: relative;
       display: flex;
@@ -158,11 +208,8 @@
       box-shadow: 0 0 0 3px var(--focus-ring);
       background: var(--bg-card);
     }
-    .form-input::placeholder {
-      color: #A39B90;
-    }
+    .form-input::placeholder { color: #A39B90; }
 
-    /* Password Toggle */
     .pwd-toggle {
       position: absolute;
       right: 12px;
@@ -174,18 +221,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 44px; /* Touch target */
+      min-width: 44px;
       min-height: 44px;
     }
-    .pwd-toggle:hover {
-      color: var(--primary);
-    }
-    .pwd-toggle svg {
-      width: 20px;
-      height: 20px;
-    }
+    .pwd-toggle:hover { color: var(--primary); }
+    .pwd-toggle svg { width: 20px; height: 20px; }
 
-    /* Options: Remember & Forgot Password */
     .form-options {
       display: flex;
       justify-content: space-between;
@@ -213,34 +254,28 @@
       font-weight: 600;
       transition: color 0.2s ease;
     }
-    .forgot-pwd:hover {
-      color: var(--primary-hover);
-    }
+    .forgot-pwd:hover { color: var(--primary-hover); }
 
-    /* Submit Button */
     .submit-btn { width: 100%; padding: 0.9rem; font-family: inherit; font-size: 15px; font-weight: 600; color: #FFFFFF; background: var(--primary); border: none; border-radius: var(--radius); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; }
     .submit-btn:hover:not(:disabled) { background: var(--primary-hover); }
     .submit-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus-ring); }
     .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    /* Loading Spinner */
     .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #FFF; border-radius: 50%; animation: spin 0.8s linear infinite; }
     .submit-btn.loading .spinner { display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Alert Message */
     .alert { display: none; padding: 0.85rem 1rem; border-radius: var(--radius); font-size: 14px; font-weight: 500; margin-bottom: 1.5rem; background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(200, 85, 85, 0.3); }
     .alert.show { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Footer */
     .universal-footer {
       position: fixed;
       bottom: 16px;
       right: 16px;
       font-size: 11px;
       font-weight: 500;
-      color: #8B7B6F; /* text-dim fallback */
+      color: #8B7B6F;
       font-family: var(--font-inter);
       z-index: 100;
       opacity: 0.7;
@@ -256,7 +291,14 @@
   </style>
 </head>
 <body>
-  
+
+  <a href="index.html" class="back-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Home
+  </a>
+
   <div class="login-container">
     <div class="login-card">
       <div class="login-header">
@@ -267,7 +309,6 @@
         <p>Sign in to your account</p>
       </div>
 
-      <!-- ADDED: type="button" so they don't accidentally try to "submit" a form -->
       <div class="role-toggle">
         <button type="button" id="tab-student" class="role-btn active" data-role="student" aria-label="Student Login">Student</button>
         <button type="button" id="tab-admin" class="role-btn" data-role="admin" aria-label="Admin Login">Admin</button>
@@ -288,12 +329,10 @@
           <div class="input-wrapper">
             <input type="password" id="password" class="form-input" placeholder="Enter your password" required />
             <button type="button" class="pwd-toggle" id="togglePassword" aria-label="Toggle password visibility">
-              <!-- Eye Icon -->
               <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
-              <!-- Eye Off (hidden by default) -->
               <svg id="eyeOffIcon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                 <line x1="1" y1="1" x2="23" y2="23"></line>
