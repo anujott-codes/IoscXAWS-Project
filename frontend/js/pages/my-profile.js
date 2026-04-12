@@ -638,6 +638,9 @@ async function uploadFile(endpoint, fieldName, fileInput) {
   formData.append(fieldName, file);
   const res = await fetch(`${API}${endpoint}`, {
     method: "POST",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
     body: formData,
   });
   if (!res.ok) {
