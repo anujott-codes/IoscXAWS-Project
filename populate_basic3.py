@@ -1,9 +1,8 @@
 import asyncio
 import json
 from app.core.database import SessionLocal
-from app.model.models import DBStudent
+from app.model.models import Student, ParentDetails
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 async def populate_basic():
     with open("basic3.json", "r") as f:
@@ -12,13 +11,13 @@ async def populate_basic():
     async with SessionLocal() as db:
         created = 0
         updated = 0
-        skipped = 0
         failed = 0
 
         for i, entry in enumerate(data):
             roll_number = entry["roll_number"]
             try:
-                result = await db.execute(select(DBStudent).filter(DBStudent.roll_number == roll_number))
+                # Handle student record
+                result = await db.execute(select(Student).filter(Student.roll_number == roll_number))
                 student = result.scalars().first()
 
                 if student:
@@ -27,9 +26,9 @@ async def populate_basic():
                     student.year = entry["year"]
                     await db.commit()
                     updated += 1
-                    print(f"[{i+1}/{len(data)}] Updated: {roll_number}")
+                    print(f"[{i+1}/{len(data)}] Updated student: {roll_number}")
                 else:
-                    new_student = DBStudent(
+                    new_student = Student(
                         roll_number=roll_number,
                         name=entry["name"],
                         branch=entry["branch"],
@@ -40,13 +39,30 @@ async def populate_basic():
                     db.add(new_student)
                     await db.commit()
                     created += 1
-                    print(f"[{i+1}/{len(data)}] Created: {roll_number}")
+                    print(f"[{i+1}/{len(data)}] Created student: {roll_number}")
+
+                # Handle parent record
+                parent_result = await db.execute(select(ParentDetails).filter(ParentDetails.student_id == roll_number))
+                parent = parent_result.scalars().first()
+
+                if parent:
+                    parent.parent_name = entry["parent_name"]
+                    await db.commit()
+                    print(f"[{i+1}/{len(data)}] Updated parent: {roll_number}")
+                else:
+                    new_parent = ParentDetails(
+                        student_id=roll_number,
+                        parent_name=entry["parent_name"],
+                    )
+                    db.add(new_parent)
+                    await db.commit()
+                    print(f"[{i+1}/{len(data)}] Created parent: {roll_number}")
 
             except Exception as e:
                 print(f"[{i+1}/{len(data)}] Failed: {roll_number} — {e}")
                 await db.rollback()
                 failed += 1
 
-        print(f"\nDone. Created: {created}, Updated: {updated}, Skipped: {skipped}, Failed: {failed}")
+        print(f"\nDone. Created: {created}, Updated: {updated}, Failed: {failed}")
 
 asyncio.run(populate_basic())
