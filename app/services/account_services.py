@@ -19,6 +19,7 @@ async def changeUserPassword(db: AsyncSession, user_id: int, new_password: str):
         .where(DBUser.id == user_id)
         .values(password_hash=hashed_pw)
     )
+    await db.flush()
     await db.commit()
 
 
