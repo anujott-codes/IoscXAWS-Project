@@ -5,6 +5,7 @@ import app.model.models as models
 from sqlalchemy.orm import selectinload
 import app.schema.schemas as schemas
 from app.services.file_services import save_file
+from typing import Optional
 
 
 # get student basic
@@ -56,8 +57,40 @@ async def create_student(db: AsyncSession, student_data):
 
 
 # ------------------ LIST ------------------
-async def list_students(db: AsyncSession, branch=None, year=None):
+async def list_students(
+    db: AsyncSession, 
+    branch: Optional[str] = None, 
+    year: Optional[int] = None,
+    category: Optional[str] = None,
+    is_hosteller: Optional[bool] = None,
+    is_placed: Optional[bool] = None,
+    scholarship: Optional[str] = None
+):
     query = select(models.Student)
+
+    if category is not None or is_hosteller is not None:
+        query = query.join(models.StudentClassification, models.Student.roll_number == models.StudentClassification.student_id, isouter=True)
+        if category is not None:
+            query = query.where(models.StudentClassification.category == category)
+        if is_hosteller is not None:
+            query = query.where(models.StudentClassification.is_hosteller == is_hosteller)
+            
+    if is_placed is not None:
+        query = query.join(models.Placement, models.Student.roll_number == models.Placement.student_id, isouter=True)
+        query = query.where(models.Placement.is_placed == is_placed)
+        
+    if scholarship is not None:
+        query = query.join(models.FinancialInfo, models.Student.roll_number == models.FinancialInfo.student_id, isouter=True)
+        if scholarship.lower() == "none" or scholarship == "":
+            from sqlalchemy import or_
+            query = query.where(
+                or_(
+                    models.FinancialInfo.scholarship_type == "None", 
+                    models.FinancialInfo.scholarship_type == None
+                )
+            )
+        else:
+            query = query.where(models.FinancialInfo.scholarship_type == scholarship)
 
     if branch:
         query = query.where(models.Student.branch == branch)
@@ -65,7 +98,7 @@ async def list_students(db: AsyncSession, branch=None, year=None):
         query = query.where(models.Student.year == year)
 
     result = await db.execute(query)
-    return result.scalars().all()
+    return result.unique().scalars().all()
 
 
 # update existing student
