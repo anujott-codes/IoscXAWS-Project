@@ -31,6 +31,10 @@ async def create_student(
 async def list_students(
     branch: Optional[str] = None,
     year: Optional[int] = None,
+    category: Optional[str] = None,
+    is_hosteller: Optional[bool] = None,
+    is_placed: Optional[bool] = None,
+    scholarship: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user: DBUser = Depends(get_current_user)
 ):
@@ -42,7 +46,7 @@ async def list_students(
                     detail="You can only see your information"
                 )
 
-        return await student_services.list_students(db, branch, year)
+        return await student_services.list_students(db, branch, year, category, is_hosteller, is_placed, scholarship)
     except HTTPException:
         raise
     except Exception as e:

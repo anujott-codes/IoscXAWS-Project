@@ -1,0 +1,15 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "dpg-d6tvlf95pdvs73br907g-a.oregon-postgres.render.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "estudent_cell_db",
+            "username": "estudent_cell_db_user",
+            "password": "bKCPORL1Rry3Kc8laWo5V36ciovsMXZn",
+            "name": "Student cell"
+        }
+    ]
+}

@@ -106,8 +106,50 @@
             <option value="4">4th Year</option>
           </select>
         </div>
-        <button class="btn btn-ghost" id="applyFilters">Apply</button>
-        <button class="btn btn-ghost" id="clearFilters">Clear</button>
+        
+        <button class="btn btn-ghost" id="toggleFiltersBtn" style="margin-top: auto; margin-bottom: 2px;">Advanced Filters</button>
+        <button class="btn btn-ghost" id="applyFilters" style="margin-top: auto; margin-bottom: 2px;">Apply</button>
+        <button class="btn btn-ghost" id="clearFilters" style="margin-top: auto; margin-bottom: 2px;">Clear</button>
+
+        <!-- Additional Filters -->
+        <div id="advancedFiltersContainer" style="display: none; flex-wrap: wrap; gap: 12px; width: 100%;">
+          <div class="filter-group" style="flex: 1 1 150px;">
+            <label class="filter-label">Category</label>
+            <select id="filterCategory" class="filter-select">
+              <option value="">All Categories</option>
+              <option value="General">General</option>
+              <option value="OBC">OBC</option>
+              <option value="SC_ST">SC/ST</option>
+              <option value="EWS">EWS</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex: 1 1 150px;">
+            <label class="filter-label">Accommodation</label>
+            <select id="filterHosteller" class="filter-select">
+              <option value="">Any</option>
+              <option value="true">Hosteller</option>
+              <option value="false">Day Scholar</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex: 1 1 150px;">
+            <label class="filter-label">Placement</label>
+            <select id="filterPlacement" class="filter-select">
+              <option value="">Any</option>
+              <option value="true">Placed</option>
+              <option value="false">Unplaced</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex: 1 1 150px;">
+            <label class="filter-label">Scholarship</label>
+            <select id="filterScholarship" class="filter-select">
+              <option value="">Any</option>
+              <option value="None">None</option>
+              <option value="EWS">EWS</option>
+              <option value="SC">SC</option>
+              <option value="Private">Private</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- Table -->
