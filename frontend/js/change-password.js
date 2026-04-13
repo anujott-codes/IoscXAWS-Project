@@ -139,12 +139,15 @@ async function submitChangePassword(e) {
       return;
     }
     
-    localStorage.setItem('must_change_password', 'false');
-    showAlert('Password changed successfully! Redirecting...', 'success');
-    
-    setTimeout(() => {
-      window.location.href = 'dashboard2.html';
-    }, 1500);
+localStorage.setItem('must_change_password', 'false');
+showAlert('Password changed successfully! Redirecting...', 'success');
+
+setTimeout(() => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  window.location.href = 'login.html';
+}, 1500);
+
   } catch (error) {
     console.error('Change password error:', error);
     showAlert('Connection error. Please try again.', 'error');
