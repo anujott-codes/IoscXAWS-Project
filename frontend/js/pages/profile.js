@@ -233,6 +233,19 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   });
 });
 
+document.getElementById("resetPasswordBtn").addEventListener("click", async () => {
+  if (confirm("Are you sure you want to reset this student's password to their parent's name?")) {
+    try {
+      const result = await apiFetch(`/account/reset/${studentId}/password`, {
+        method: "POST"
+      });
+      showAlert("profileAlert", result.message || "Password reset successfully", "success");
+    } catch (e) {
+      showAlert("profileAlert", e.message, "error");
+    }
+  }
+});
+
 document.getElementById("editBasicBtn").addEventListener("click", () => {
   document.getElementById("basicInfoView").classList.add("hidden");
   document.getElementById("basicInfoEdit").classList.remove("hidden");

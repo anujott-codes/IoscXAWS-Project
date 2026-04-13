@@ -9,7 +9,7 @@ function getPhotoUrl(photo_path) {
   return `${API}/${photo_path}`;
 }
 
-async function loadStudents(branch = "", year = "") {
+async function loadStudents(branch = "", year = "", category = "", isHosteller = "", isPlaced = "", scholarship = "") {
   const tbody = document.getElementById("studentsTableBody");
   tbody.innerHTML = '<tr><td colspan="7" class="table-empty">Loading...</td></tr>';
 
@@ -18,6 +18,11 @@ async function loadStudents(branch = "", year = "") {
     const params = new URLSearchParams();
     if (branch) params.append("branch", branch);
     if (year) params.append("year", year);
+    if (category) params.append("category", category);
+    if (isHosteller !== "") params.append("is_hosteller", isHosteller);
+    if (isPlaced !== "") params.append("is_placed", isPlaced);
+    if (scholarship) params.append("scholarship", scholarship);
+
     if (params.toString()) url += "?" + params.toString();
 
     allStudents = await apiFetch(url);
@@ -93,15 +98,35 @@ document.getElementById("confirmDelete").addEventListener("click", async () => {
   }
 });
 
+document.getElementById("toggleFiltersBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  const container = document.getElementById("advancedFiltersContainer");
+  if (container.style.display === "none" || container.style.display === "") {
+    container.style.display = "flex";
+    document.getElementById("toggleFiltersBtn").textContent = "Hide Filters";
+  } else {
+    container.style.display = "none";
+    document.getElementById("toggleFiltersBtn").textContent = "Advanced Filters";
+  }
+});
+
 document.getElementById("applyFilters").addEventListener("click", () => {
   const branch = document.getElementById("filterBranch").value;
   const year = document.getElementById("filterYear").value;
-  loadStudents(branch, year);
+  const category = document.getElementById("filterCategory").value;
+  const isHosteller = document.getElementById("filterHosteller").value;
+  const isPlaced = document.getElementById("filterPlacement").value;
+  const scholarship = document.getElementById("filterScholarship").value;
+  loadStudents(branch, year, category, isHosteller, isPlaced, scholarship);
 });
 
 document.getElementById("clearFilters").addEventListener("click", () => {
   document.getElementById("filterBranch").value = "";
   document.getElementById("filterYear").value = "";
+  document.getElementById("filterCategory").value = "";
+  document.getElementById("filterHosteller").value = "";
+  document.getElementById("filterPlacement").value = "";
+  document.getElementById("filterScholarship").value = "";
   loadStudents();
 });
 
