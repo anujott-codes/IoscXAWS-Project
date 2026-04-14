@@ -400,10 +400,10 @@
 
       if (!enrollmentNumber) { showAlert('Please enter your enrollment number'); return; }
       if (!studentEmail) { showAlert('Please enter your email'); return; }
-      if (!studentEmail.endsWith('@std.ggsipu.ac.in')) {
-        showAlert('Email must end with @std.ggsipu.ac.in');
+      if (!studentEmail.endsWith('@std.ggsipu.ac.in') && !studentEmail.endsWith('@gmail.com')) {
+        showAlert('Email must end with @std.ggsipu.ac.in or @gmail.com');
         return;
-      }
+    }
 
       setLoading('sendOtpBtn', 'sendBtnText', true, 'Sending OTP...');
       hideAlert();
