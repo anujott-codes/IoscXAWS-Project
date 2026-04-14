@@ -213,3 +213,14 @@ class AcademicDocuments(Base):
     is_lost = Column(Boolean, default=False)
 
     student = relationship("Student", back_populates="academic_documents")
+
+class OTPStore(Base):
+    __tablename__ = "otp_store"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    enrollment_number = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    otp = Column(String(6), nullable=False)
+    expires_at = Column(String, nullable=False)
+    is_used = Column(Boolean, default=False)
+    created_at = Column(String, nullable=True)
