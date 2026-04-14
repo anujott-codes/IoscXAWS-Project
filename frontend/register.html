@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="ipu.jpg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — E-Student Cell</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-inter: 'Inter', sans-serif;
+      --bg: #F8F5EC;
+      --bg-card: #FFFFFF;
+      --input-bg: #F1E9D8;
+      --border: #E3D8C4;
+      --text-main: #1C1A1A;
+      --text-muted: #5E544A;
+      --primary: #8B1A1A;
+      --primary-hover: #C8A243;
+      --focus-ring: rgba(139, 26, 26, 0.4);
+      --danger: #C85555;
+      --danger-bg: rgba(200, 85, 85, 0.1);
+      --success: #2D7A4F;
+      --success-bg: rgba(45, 122, 79, 0.1);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-inter);
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -20px;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center top;
+      filter: blur(6px) brightness(0.45);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at 50% 45%,
+        transparent 25%,
+        rgba(0, 0, 0, 0.45) 70%,
+        rgba(0, 0, 0, 0.75) 100%
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .back-home,
+    .register-container,
+    .universal-footer { position: relative; z-index: 1; }
+
+    .back-home {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: all 0.2s ease;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(28,26,26,0.06);
+    }
+    .back-home:hover { color: var(--primary); border-color: var(--primary); background: var(--bg); }
+    .back-home svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .register-container {
+      width: 100%;
+      max-width: 440px;
+      padding: 2rem;
+    }
+
+    .register-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 10px 30px rgba(28, 26, 26, 0.05), 0 1px 3px rgba(28, 26, 26, 0.03);
+    }
+
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .register-logo {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1.25rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(139, 26, 26, 0.1);
+    }
+    .register-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .register-header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+    .register-header p { font-size: 14px; color: var(--text-muted); }
+
+    /* Steps indicator */
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+    .step.active .step-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+    }
+    .step.done .step-circle {
+      border-color: var(--success);
+      background: var(--success);
+      color: white;
+    }
+    .step-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    .step.active .step-label { color: var(--primary); }
+    .step-line {
+      width: 60px;
+      height: 2px;
+      background: var(--border);
+      margin-bottom: 16px;
+      transition: background 0.3s ease;
+    }
+    .step-line.done { background: var(--success); }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+    .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .form-input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text-main);
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.2s ease;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      background: var(--bg-card);
+    }
+    .form-input::placeholder { color: #A39B90; }
+
+    .otp-input {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 12px;
+      padding: 1rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #FFFFFF;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 48px;
+      margin-top: 1.5rem;
+    }
+    .submit-btn:hover:not(:disabled) { background: var(--primary-hover); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #FFF; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .submit-btn.loading .spinner { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert {
+      display: none;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+    .alert.show { display: block; animation: fadeIn 0.3s ease; }
+    .alert.error { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(200, 85, 85, 0.3); }
+    .alert.success { background: var(--success-bg); color: var(--success); border: 1px solid rgba(45, 122, 79, 0.3); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .resend-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .resend-link button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      padding: 0;
+    }
+    .resend-link button:hover { color: var(--primary-hover); }
+    .resend-link button:disabled { color: var(--text-muted); cursor: not-allowed; }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .login-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .login-link a:hover { color: var(--primary-hover); }
+
+    .hidden { display: none !important; }
+
+    .universal-footer {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #8B7B6F;
+      font-family: var(--font-inter);
+      z-index: 100;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="login.html" class="back-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Login
+  </a>
+
+  <div class="register-container">
+    <div class="register-card">
+
+      <div class="register-header">
+        <div class="register-logo">
+          <img src="ipu.jpg" alt="Logo">
+        </div>
+        <h1>First Year Registration</h1>
+        <p>Create your E-Student Cell account</p>
+      </div>
+
+      <!-- Steps indicator -->
+      <div class="steps">
+        <div class="step active" id="step1-indicator">
+          <div class="step-circle">1</div>
+          <span class="step-label">Details</span>
+        </div>
+        <div class="step-line" id="step-line"></div>
+        <div class="step" id="step2-indicator">
+          <div class="step-circle">2</div>
+          <span class="step-label">Verify OTP</span>
+        </div>
+      </div>
+
+      <div id="alertBox" class="alert"></div>
+
+      <!-- Step 1: Enrollment + Email -->
+      <div id="step1">
+        <div class="form-group">
+          <label class="form-label" for="enrollment">Enrollment Number</label>
+          <input type="text" id="enrollment" class="form-input" placeholder="e.g., 59190519XX"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Student Email ID</label>
+          <input type="email" id="email" class="form-input" placeholder="e.g., 59190519XX@std.ggsipu.ac.in"/>
+          <p class="form-hint">Must end with @std.ggsipu.ac.in</p>
+        </div>
+        <button class="submit-btn" id="sendOtpBtn" onclick="sendOTP()">
+          <span class="spinner"></span>
+          <span id="sendBtnText">Send OTP</span>
+        </button>
+        <div class="login-link">Already have an account? <a href="login.html">Sign in</a></div>
+      </div>
+
+      <!-- Step 2: OTP Verification -->
+      <div id="step2" class="hidden">
+        <div class="form-group">
+          <label class="form-label">Enter OTP</label>
+          <input type="text" id="otp" class="form-input otp-input" placeholder="——————" maxlength="6"/>
+          <p class="form-hint" style="text-align:center;">OTP sent to <strong id="emailDisplay"></strong></p>
+        </div>
+        <button class="submit-btn" id="verifyOtpBtn" onclick="verifyOTP()">
+          <span class="spinner"></span>
+          <span id="verifyBtnText">Verify & Create Account</span>
+        </button>
+        <div class="resend-link">
+          Didn't receive it? <button id="resendBtn" onclick="resendOTP()">Resend OTP</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="universal-footer">Made by IoSC & AWS EDC</footer>
+
+  <script>
+    const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? "http://localhost:8000"
+      : "http://213.210.37.18";
+
+    let enrollmentNumber = '';
+    let studentEmail = '';
+
+    function showAlert(message, type = 'error') {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.textContent = message;
+      alertBox.className = `alert show ${type}`;
+    }
+
+    function hideAlert() {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.className = 'alert';
+    }
+
+    function setLoading(btnId, textId, loading, text) {
+      const btn = document.getElementById(btnId);
+      const span = document.getElementById(textId);
+      if (loading) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+        span.textContent = text;
+      } else {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        span.textContent = text;
+      }
+    }
+
+    async function sendOTP() {
+      enrollmentNumber = document.getElementById('enrollment').value.trim();
+      studentEmail = document.getElementById('email').value.trim();
+
+      if (!enrollmentNumber) { showAlert('Please enter your enrollment number'); return; }
+      if (!studentEmail) { showAlert('Please enter your email'); return; }
+      if (!studentEmail.endsWith('@std.ggsipu.ac.in')) {
+        showAlert('Email must end with @std.ggsipu.ac.in');
+        return;
+      }
+
+      setLoading('sendOtpBtn', 'sendBtnText', true, 'Sending OTP...');
+      hideAlert();
+
+      try {
+        const res = await fetch(`${API}/auth/register/send-otp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enrollment_number: enrollmentNumber, email: studentEmail })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showAlert(data.detail || 'Failed to send OTP');
+          setLoading('sendOtpBtn', 'sendBtnText', false, 'Send OTP');
+          return;
+        }
+
+        // Move to step 2
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        document.getElementById('emailDisplay').textContent = studentEmail;
+        document.getElementById('step1-indicator').classList.remove('active');
+        document.getElementById('step1-indicator').classList.add('done');
+        document.getElementById('step1-indicator').querySelector('.step-circle').innerHTML = '✓';
+        document.getElementById('step-line').classList.add('done');
+        document.getElementById('step2-indicator').classList.add('active');
+        showAlert('OTP sent successfully! Check your email.', 'success');
+
+      } catch (e) {
+        showAlert('Connection error. Please try again.');
+        setLoading('sendOtpBtn', 'sendBtnText', false, 'Send OTP');
+      }
+    }
+
+    async function verifyOTP() {
+      const otp = document.getElementById('otp').value.trim();
+
+      if (!otp || otp.length !== 6) { showAlert('Please enter the 6-digit OTP'); return; }
+
+      setLoading('verifyOtpBtn', 'verifyBtnText', true, 'Verifying...');
+      hideAlert();
+
+      try {
+        const res = await fetch(`${API}/auth/register/verify-otp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enrollment_number: enrollmentNumber, email: studentEmail, otp })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showAlert(data.detail || 'Invalid OTP');
+          setLoading('verifyOtpBtn', 'verifyBtnText', false, 'Verify & Create Account');
+          return;
+        }
+
+        // Save token and redirect to change password
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('role', data.role);
+        localStorage.setItem('must_change_password', 'true');
+
+        showAlert('Account created! Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = 'change-password.html';
+        }, 1500);
+
+      } catch (e) {
+        showAlert('Connection error. Please try again.');
+        setLoading('verifyOtpBtn', 'verifyBtnText', false, 'Verify & Create Account');
+      }
+    }
+
+    async function resendOTP() {
+      const resendBtn = document.getElementById('resendBtn');
+      resendBtn.disabled = true;
+      resendBtn.textContent = 'Sending...';
+      hideAlert();
+
+      try {
+        const res = await fetch(`${API}/auth/register/send-otp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enrollment_number: enrollmentNumber, email: studentEmail })
+        });
+
+        const data = await res.json();
+        if (!res.ok) { showAlert(data.detail || 'Failed to resend OTP'); }
+        else { showAlert('OTP resent successfully!', 'success'); }
+      } catch (e) {
+        showAlert('Connection error. Please try again.');
+      }
+
+      // Cooldown 30 seconds
+      let seconds = 30;
+      const interval = setInterval(() => {
+        resendBtn.textContent = `Resend OTP (${seconds}s)`;
+        seconds--;
+        if (seconds < 0) {
+          clearInterval(interval);
+          resendBtn.textContent = 'Resend OTP';
+          resendBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (!document.getElementById('step1').classList.contains('hidden')) sendOTP();
+        else verifyOTP();
+      }
+    });
+  </script>
+
+</body>
+</html>
