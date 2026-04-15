@@ -130,7 +130,7 @@ class FinancialInfo(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     student_id = Column(String, ForeignKey("students.roll_number"), unique=True, nullable=False)
     has_loan = Column(Boolean, default=False)
-    scholarship_type = Column(Enum(ScholarshipEnum), default=ScholarshipEnum.none)
+    scholarship_type = Column(String, default="None")
     scholarship_amount = Column(Numeric(10, 2), nullable=True)
 
     student = relationship("Student", back_populates="financial_info")
