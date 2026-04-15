@@ -18,6 +18,11 @@ function getPhotoUrl(photo_path) {
   return `${API}${photo_path.startsWith('/') ? '' : '/'}${photo_path}`;
 }
 
+function toggleCustomScholarship(value) {
+  const group = document.getElementById("customScholarshipGroup");
+  group.style.display = value === "Other" ? "block" : "none";
+}
+
 async function loadProfile() {
   try {
     const me = await apiFetch(`/auth/me`);
@@ -388,7 +393,14 @@ document.getElementById("financialBtn").addEventListener("click", () => {
   if (!form.classList.contains("hidden") && financialExists && studentData.financial_info) {
     const f = studentData.financial_info;
     document.getElementById("fi_has_loan").value = f.has_loan.toString();
-    document.getElementById("fi_scholarship_type").value = f.scholarship_type;
+    const knownTypes = ["None", "EWS", "SC", "Private", "Other"];
+    if (knownTypes.includes(f.scholarship_type)) {
+      document.getElementById("fi_scholarship_type").value = f.scholarship_type;
+    } else {
+      document.getElementById("fi_scholarship_type").value = "Other";
+      document.getElementById("fi_scholarship_custom").value = f.scholarship_type;
+      document.getElementById("customScholarshipGroup").style.display = "block";
+    }
     document.getElementById("fi_scholarship_amount").value = f.scholarship_amount || "";
   }
 });
@@ -398,9 +410,11 @@ document.getElementById("cancelFinancial").addEventListener("click", () => {
 });
 
 document.getElementById("saveFinancial").addEventListener("click", async () => {
+  const scholarshipType = document.getElementById("fi_scholarship_type").value;
+  const customScholarship = document.getElementById("fi_scholarship_custom")?.value.trim() || "";
   const body = {
     has_loan: document.getElementById("fi_has_loan").value === "true",
-    scholarship_type: document.getElementById("fi_scholarship_type").value,
+    scholarship_type: scholarshipType === "Other" && customScholarship ? customScholarship : scholarshipType,
     scholarship_amount: document.getElementById("fi_scholarship_amount").value || null,
   };
   try {
