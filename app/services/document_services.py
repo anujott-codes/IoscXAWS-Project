@@ -93,7 +93,9 @@ async def upload_documents(
     obj = result.scalar_one_or_none()
 
     if not obj:
-        raise ValueError("Documents record not found. Create it first.")
+        obj = models.Documents(student_id=student_id)
+        db.add(obj)
+        await db.flush()
 
     if aadhaar:
         obj.aadhaar_path = save_file(student_id, aadhaar)
