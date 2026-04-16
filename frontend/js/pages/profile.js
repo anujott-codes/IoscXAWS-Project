@@ -804,7 +804,7 @@ document.getElementById("uploadAcadocsBtn").addEventListener("click", async () =
     });
     if (!res.ok) throw new Error("Upload failed");
     showAlert("profileAlert", "Academic files uploaded successfully.", "success");
-    marksheets.value = ""; provisional.value = "";
+    if (provisional) provisional.value = "";
     semInputs.forEach(el => { if (el) el.value = ""; });
   } catch (e) {
     showAlert("profileAlert", e.message, "error");
