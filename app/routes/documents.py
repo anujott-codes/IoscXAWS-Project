@@ -97,3 +97,31 @@ async def download_document(
     if not path or not os.path.exists(path):
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(path, filename=os.path.basename(path))
+
+# Public router for file downloads (no auth — token passed as query param instead)
+public_router = APIRouter(
+    prefix="/students/{student_id}/documents",
+    tags=["Documents"],
+)
+
+@public_router.get("/download/{file_type}")
+async def download_document_public(
+    student_id: str,
+    file_type: str,
+    db: AsyncSession = Depends(get_db)
+):
+    if file_type not in ["aadhaar", "pan", "id_card"]:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    try:
+        doc = await document_services.get_documents(db, student_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    path_map = {
+        "aadhaar": doc.aadhaar_path,
+        "pan": doc.pan_path,
+        "id_card": doc.id_card_path,
+    }
+    path = path_map[file_type]
+    if not path or not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(path, filename=os.path.basename(path))

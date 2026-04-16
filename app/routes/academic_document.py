@@ -95,3 +95,30 @@ async def download_academic_doc(
     if not path or not os.path.exists(path):
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(path, filename=os.path.basename(path))
+
+# Public router for file downloads
+public_router = APIRouter(
+    prefix="/students/{student_id}/academic-documents",
+    tags=["Academic Documents"],
+)
+
+@public_router.get("/download/{file_type}")
+async def download_academic_doc_public(
+    student_id: str,
+    file_type: str,
+    db: AsyncSession = Depends(get_db)
+):
+    if file_type not in ["marksheets", "provisional_cert"]:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    try:
+        doc = await academic_document_services.get_academic_docs(db, student_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    path_map = {
+        "marksheets": doc.marksheets_path,
+        "provisional_cert": doc.provisional_cert_path,
+    }
+    path = path_map[file_type]
+    if not path or not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(path, filename=os.path.basename(path))
