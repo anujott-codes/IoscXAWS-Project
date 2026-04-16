@@ -715,6 +715,7 @@ document.getElementById("uploadDocsBtn").addEventListener("click", async () => {
 
     const res = await fetch(`${API}/students/${studentId}/documents/upload`, {
       method: "POST",
+      headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
       body: formData,
     });
     if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || "Upload failed"); }
@@ -741,9 +742,10 @@ document.getElementById("uploadAcadocsBtn").addEventListener("click", async () =
 
     const res = await fetch(`${API}/students/${studentId}/academic-documents/upload`, {
       method: "POST",
+      headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
       body: formData,
     });
-    if (!res.ok) throw new Error("Upload failed");
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || "Upload failed"); }
     showAlert("profileAlert", "Academic files uploaded successfully.", "success");
     marksheets.value = ""; provisional.value = "";
   } catch (e) {
