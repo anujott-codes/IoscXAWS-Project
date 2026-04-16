@@ -717,7 +717,7 @@ document.getElementById("uploadDocsBtn").addEventListener("click", async () => {
       method: "POST",
       body: formData,
     });
-    if (!res.ok) throw new Error("Upload failed");
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || "Upload failed"); }
     showAlert("profileAlert", "Document files uploaded successfully.", "success");
     aadhaar.value = ""; pan.value = ""; idCard.value = "";
   } catch (e) {
