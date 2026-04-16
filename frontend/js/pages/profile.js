@@ -177,12 +177,24 @@ function renderResearch(list) {
 function renderDocuments(d) {
   const el = document.getElementById("documentsView");
   if (!d) { el.innerHTML = '<p class="no-data">No document record added yet.</p>'; return; }
+  function dlBtn(label, type, path) {
+    if (!path) return `<span style="color:#666;">No file uploaded</span>`;
+    return `<a href="${API}/students/${studentId}/documents/download/${type}" class="btn btn-ghost btn-sm" download style="text-decoration:none;">⬇ Download ${label}</a>`;
+  }
   el.innerHTML = `
     <div class="info-grid">
       <div class="info-item"><span class="info-label">Aadhaar Verified</span><span class="info-value">${boolDisplay(d.aadhaar_verified)}</span></div>
       <div class="info-item"><span class="info-label">PAN Verified</span><span class="info-value">${boolDisplay(d.pan_verified)}</span></div>
       <div class="info-item"><span class="info-label">ID Card Verified</span><span class="info-value">${boolDisplay(d.id_card_verified)}</span></div>
       <div class="info-item"><span class="info-label">Library Card</span><span class="info-value">${boolDisplay(d.library_card)}</span></div>
+    </div>
+    <div style="margin-top:16px;">
+      <h4 style="margin-bottom:10px;color:#aaa;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;">Uploaded Files</h4>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        ${dlBtn("Aadhaar", "aadhaar", d.aadhaar_path)}
+        ${dlBtn("PAN", "pan", d.pan_path)}
+        ${dlBtn("ID Card", "id_card", d.id_card_path)}
+      </div>
     </div>
   `;
 }
@@ -219,11 +231,22 @@ function renderPlacement(p) {
 function renderAcadocs(a) {
   const el = document.getElementById("acadocsView");
   if (!a) { el.innerHTML = '<p class="no-data">No academic documents record added yet.</p>'; return; }
+  function dlBtn(label, type, path) {
+    if (!path) return `<span style="color:#666;">No file uploaded</span>`;
+    return `<a href="${API}/students/${studentId}/academic-documents/download/${type}" class="btn btn-ghost btn-sm" download style="text-decoration:none;">⬇ Download ${label}</a>`;
+  }
   el.innerHTML = `
     <div class="info-grid">
       <div class="info-item"><span class="info-label">All Marksheets</span><span class="info-value">${boolDisplay(a.all_marksheets)}</span></div>
       <div class="info-item"><span class="info-label">Provisional Cert</span><span class="info-value">${boolDisplay(a.provisional_cert)}</span></div>
       <div class="info-item"><span class="info-label">Is Lost</span><span class="info-value">${boolDisplay(a.is_lost)}</span></div>
+    </div>
+    <div style="margin-top:16px;">
+      <h4 style="margin-bottom:10px;color:#aaa;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;">Uploaded Files</h4>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        ${dlBtn("Marksheets", "marksheets", a.marksheets_path)}
+        ${dlBtn("Provisional Cert", "provisional_cert", a.provisional_cert_path)}
+      </div>
     </div>
   `;
 }
