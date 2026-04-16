@@ -75,7 +75,7 @@ async def upload_academic_docs(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/download/{file_type}")
+@router.get("/download/{file_type}", dependencies=[])
 async def download_academic_doc(
     student_id: str,
     file_type: str,
