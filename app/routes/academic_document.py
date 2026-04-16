@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse
+import os
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
 
@@ -72,3 +74,24 @@ async def upload_academic_docs(
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/download/{file_type}")
+async def download_academic_doc(
+    student_id: str,
+    file_type: str,
+    db: AsyncSession = Depends(get_db)
+):
+    if file_type not in ["marksheets", "provisional_cert"]:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    try:
+        doc = await academic_document_services.get_academic_docs(db, student_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    path_map = {
+        "marksheets": doc.marksheets_path,
+        "provisional_cert": doc.provisional_cert_path,
+    }
+    path = path_map[file_type]
+    if not path or not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(path, filename=os.path.basename(path))
