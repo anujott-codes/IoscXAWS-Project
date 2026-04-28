@@ -494,13 +494,29 @@
         });
 
         const data = await res.json();
-        if (!res.ok) { showAlert(data.detail || 'Failed to resend OTP'); }
-        else { showAlert('OTP resent successfully!', 'success'); }
+
+        if (!res.ok) {
+          showAlert(data.detail || 'Failed to resend OTP');
+
+          if (res.status === 429) {
+            resendBtn.textContent = 'Limit reached. Try after 10 mins';
+            return;
+          }
+
+          startResendCooldown(resendBtn);
+          return;
+        }
+
+        showAlert('OTP resent successfully!', 'success');
+        startResendCooldown(resendBtn);
+
       } catch (e) {
         showAlert('Connection error. Please try again.');
+        startResendCooldown(resendBtn);
       }
+    }
 
-      // Cooldown 30 seconds
+    function startResendCooldown(resendBtn) {
       let seconds = 30;
       const interval = setInterval(() => {
         resendBtn.textContent = `Resend OTP (${seconds}s)`;
