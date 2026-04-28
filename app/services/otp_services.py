@@ -10,11 +10,10 @@ from app.model.models import OTPStore
 
 GMAIL_USER = os.getenv("GMAIL_USER")
 GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
-
 # Rate limit config
 MAX_OTP_SENDS_PER_HOUR = 3      # max OTP requests per enrollment per hour
 MAX_VERIFY_ATTEMPTS = 5         # max failed verify attempts before lockout
-OTP_WINDOW_MINUTES = 60         # rolling window for send rate limit
+OTP_WINDOW_MINUTES = 10         # rolling window for send rate limit
 OTP_EXPIRY_MINUTES = 10
 
 def generate_otp():
@@ -37,7 +36,7 @@ async def send_otp(db: AsyncSession, enrollment_number: str, email: str):
     if len(recent_records) >= MAX_OTP_SENDS_PER_HOUR:
         raise ValueError(
             f"Too many OTP requests. You can request a maximum of "
-            f"{MAX_OTP_SENDS_PER_HOUR} OTPs per hour. Please try again later."
+            f"{MAX_OTP_SENDS_PER_HOUR} OTPs per 10 minutes. Please try again later."
         )
 
     
@@ -80,7 +79,7 @@ async def send_otp(db: AsyncSession, enrollment_number: str, email: str):
         <h1 style="letter-spacing: 8px; color: #8B1A1A;">{otp}</h1>
         <p>This OTP is valid for <strong>{OTP_EXPIRY_MINUTES} minutes</strong>.</p>
         <p style="color: #999; font-size: 12px;">
-            You have {remaining} OTP request(s) remaining this hour.
+            You have {remaining} OTP request(s) remaining in this 10 minute window.
         </p>
         <p style="color: #999; font-size: 12px;">If you didn't request this, ignore this email.</p>
     </div>
