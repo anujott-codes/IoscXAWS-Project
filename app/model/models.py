@@ -224,6 +224,7 @@ class AcademicDocuments(Base):
     student = relationship("Student", back_populates="academic_documents")
 
 from sqlalchemy import DateTime
+
 class OTPStore(Base):
     __tablename__ = "otp_store"
 
@@ -233,4 +234,8 @@ class OTPStore(Base):
     otp = Column(String(6), nullable=False)
     expires_at = Column(DateTime, nullable=False)
     is_used = Column(Boolean, default=False)
-    created_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, nullable=False)
+
+    # rate limiting fields
+    send_count = Column(Integer, default=1, nullable=False) 
+    attempt_count = Column(Integer, default=0, nullable=False) 
